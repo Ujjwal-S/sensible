@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/register.css">
+    <title>Senible Meeting</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <span><a href="/">Sensible</a></span>
+            <nav>
+                <ul>
+                    <a href="/" class="hover_underline_animation">Register</a>
+                    <a href="/login" class="hover_underline_animation">Login</a>
+                    <a><img src="./images/translate.png" alt="translate"></a>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="box">
+                <span>Welcome 🙌</span>
+                <form action="/register-user" method="post">
+                    <div class="input-box">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Enter your email" autocomplete="off">
+                    </div>
+                    <div class="input-box">
+                        <label for="password1">Password</label>
+                        <input type="password" name="password1" id="password1" placeholder="Create a password" autocomplete="off">
+                    </div>
+                    <div class="input-box">
+                        <label for="password2">Again!</label>
+                        <input type="password" name="password2" id="password2" placeholder="Confirm password" autocomplete="off">
+                    </div>
+                    <button type="submit">
+                        Submit
+                    </button>
+                </form>
+        </main>
+    </div>
+</body>
+</html>

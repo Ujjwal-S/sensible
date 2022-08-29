@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        let is_login = localStorage.getItem("isLogin");
+        if (is_login != "true"){
+            window.location.href = '/login'
+        }
+    </script>
+    <link rel="stylesheet" href="./css/meeting.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <span>Sensible</span>
+            <nav>
+                <ul>
+                    <li><a href="/notifications">🔔</a></li>
+                    <li><img src="./images/translate.png" alt="translate"></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="section-selector">
+                <a href="/create-meeting" class="active-section">Create Meeting</a>
+                <a href="/people">People</a>
+            </div>
+            <div class="inst-meeting">
+                <h2>📌 Create Instant Meeting</h2>
+                <form action="">
+                    <div class="inp-ele">
+                        <label for="topic">Topic</label>
+                        <input type="text" name="topic" id="topic" placeholder="Enter a topic for the meeting.">
+                    </div>
+                    <div class="inp-ele">
+                        <label for="t-limit">Maximum Time Limit (Mins)</label>
+                        <input onmousewheel="{}" type="number" name="t-limit" id="t-limit"  min="0" step="15" placeholder="Enter the max time limit">
+                    </div>
+                    <div class="inp-ele">
+                        <label for="t-limit">🧑‍🤝‍🧑 Add Participants</label>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab">
+                            <input class="accordion-checkbox" type="checkbox" id="chck1">
+                            <label class="tab-label" for="chck1">Your Contacts</label>
+                            <div class="tab-content">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button id="create-btn">Create Meeting</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+    </div>
+    <script>
+        const tab_content = document.getElementsByClassName("tab-content")[0];
+        const create_btn = document.getElementById("create-btn")
+        const form = document.getElementsByTagName("form")[0]
+
+        getMyContacts();
+        async function getMyContacts(){
+            const username = localStorage.getItem("username");
+            
+            let response = await fetch('/get-my-contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({"username": username})
+            });
+            
+            let result = await response.json()
+            
+            if (result['error'] === "false"){
+                result = result['s_message'][0]['contacts']
+                result.forEach(element => {
+                    let e = document.createElement("div");
+                    e.classList.add("participant");
+                    e.innerHTML = 
+                    `
+                        <img src="./images/person2.png" alt="person-img">
+                        <label for="${element}">${element}</label>
+                        <input type="checkbox" class="insaan" name="${element}" id="${element}" value="${element}">
+                    `;
+                    tab_content.append(e);
+                });
+            }
+            else{
+                alert("Something went wrong")
+            }
+
+        }
+        let flag = false;
+        create_btn.addEventListener("click", () => {
+
+            flag = true;
+            createMeeting();
+        })
+        form.addEventListener("submit", (e) => {
+
+                e.preventDefault();
+                if (!flag){
+                    createMeeting();
+                }
+        })
+
+        
+        async function createMeeting(){
+            const username = localStorage.getItem("username");
+            let insann = [...document.getElementsByClassName("insaan")]
+            people = []
+            for(let i of insann) if(i.checked) people.push(i.value)
+
+            create_btn.innerText = "Creating Meeting"
+            create_btn.disabled = true;
+            
+            const duration = document.getElementById("t-limit").value
+
+            const obj = {
+                "username": username,
+                "duration": duration,
+                "people": people
+            }
+
+            let response = await fetch('/create-meeting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(obj)
+            });
+            
+
+            let result = await response.json()
+
+            if (result['error'] === false){
+                // window.location.href = '/login'
+                let meet_id = result['meeting_id'];
+
+                window.location.href = `/call/${meet_id}`
+            }
+            else{
+                create_btn.innerText = "Create Meeting"
+                create_btn.disabled = false;
+                alert("Something went wrong")
+            }
+        } 
+    </script>
+</body>
+</html>

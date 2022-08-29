@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/login.css">
+    <title>Senible Meeting</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <span><a href="/">Sensible</a></span>
+            <nav>
+                <ul>
+                    <a href="/" class="hover_underline_animation">Register</a>
+                    <a href="/login" class="hover_underline_animation">Login</a>
+                    <a><img src="./images/translate.png" alt="translate"></a>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="box">
+                <span>Welcome Back</span>
+                <span class="missed-you">(We missed you 👀)</span>
+                <form action="/login" method="post">
+                    <div class="input-box">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Enter your email" autocomplete="off">
+                    </div>
+                    <div class="input-box">
+                        <label for="password1">Password</label>
+                        <input type="password" name="password1" id="password1" placeholder="Create a password" autocomplete="off">
+                    </div>
+                    <button type="submit">
+                        Submit
+                    </button>
+                </form>
+        </main>
+    </div>
+    <script>
+        const form = document.getElementsByTagName("form")[0];
+        form.addEventListener("submit", (e) =>{
+            e.preventDefault();
+            let user = {
+                email : e.target.elements[0].value,
+                password1: e.target.elements[1].value
+            }
+            submitForm(user);
+        })
+        async function submitForm(user){
+            let response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(user)
+            });
+
+            let result = await response.json()
+                
+            if (result['error'] === "false"){
+                localStorage.setItem("isLogin", "true");
+                localStorage.setItem("username", user['email'])
+                window.location.href="/people"
+            }
+            else{
+                alert(`${result['s_message']}`);
+                localStorage.setItem("isLogin", "false")
+                window.location.reload(true); 
+            }
+        }
+    </script>
+
+</body>
+</html>

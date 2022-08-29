@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        let is_login = localStorage.getItem("isLogin");
+        if (is_login != "true"){
+            window.location.href = '/login'
+        }
+    </script>
+    <link rel="stylesheet" href="./css/people.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <span>Sensible</span>
+            <nav>
+                <ul>
+                    <li><a href="/notifications">🔔</a></li>
+                    <li><img src="./images/translate.png" alt="translate"></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="section-selector">
+                <a href="/create-meeting">Create Meeting</a>
+                <a href="/people" class="active-section">People</a>
+            </div>
+
+            <div class="contacts">
+                <div class="my-contacts">
+                    <span class="your-contacts">Your Contacts</span>
+                    <hr>
+                    <div class="contact-list">
+                        
+                    </div>
+                </div>
+                <div class="public-search">
+                    <div class="gs-heading">
+                        <label for="gs-username" class="global-search">Global Search</label>
+                            <input type="text" name="gs-username" id="gs-username" placeholder="@user_name">
+
+                    </div>
+                    <div class="info-text">
+                        <p>
+                            Search People with their @username and add them to your contacts!
+                        </p>
+                    </div>
+                    <div class="gs-suggestions">
+                        
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const gs_search_input = document.getElementById("gs-username");
+        const gs_suggestions = document.getElementsByClassName("gs-suggestions")[0];
+        const info_text = document.getElementsByClassName("info-text")[0];
+        const contact_list = document.getElementsByClassName("contact-list")[0]
+
+        getMyContacts();
+        async function getMyContacts(){
+            const username = localStorage.getItem("username");
+            
+            let response = await fetch('/get-my-contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({"username": username})
+            });
+            
+            let result = await response.json()
+            
+            if (result['error'] === "false"){
+                result = result['s_message'][0]['contacts']
+                result.forEach(element => {
+                    let e = document.createElement("div");
+                    e.classList.add("individual-contact");
+                    e.innerHTML = 
+                    `
+                        <img src="./images/person2.png" alt="person-img">
+                        <span>${element}</span>
+                        <button onclick="alert('Not implemented yet. Please create meeting from the <Create Meeting> tab.')"><img src="./images/up-right-arrow.png" alt="arrow-right">&nbsp; Call Now</button>
+                        <div class="dot"></div>
+                    `;
+                    contact_list.append(e);
+                });
+            }
+            else{
+                alert("Something went wrong")
+            }
+
+        }
+
+        gs_search_input.addEventListener("keydown", (e) => {
+            if (e.key === 'Enter') {
+                let user_name = e.target.value;
+                if (user_name === ""){
+                    return;
+                }
+                let username = {
+                    "username": user_name
+                }
+                searchUser(username);
+            }
+        })
+
+        async function searchUser(username){
+            let response = await fetch('/find-people', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(username)
+            });
+
+            let result = await response.json()
+                
+            if (result['error'] === "false"){
+                gs_suggestions.innerHTML = "";
+                info_text.style.display = "none"
+                result['s_message'].forEach(element => {
+                    if (element['username'] == localStorage.getItem("username")){
+                        return;
+                    }
+                    let e = document.createElement("div");
+                    e.classList.add("gs-suggestion");
+                    e.innerHTML = 
+                    `
+                        <img src="./images/person2.png" alt="person-img">
+                        <span>${element['username']}</span>
+                        <button id="${element['username']}" onClick=addContact("${localStorage.getItem("username")},${element['username']}") class="invite-btn">+ Add</button>
+                    `;
+                    gs_suggestions.append(e);
+                });
+            }
+            else{
+                alert("Something went wrong")
+            }
+        }
+
+        function addContact(info){
+            let u = info.split(",");
+            let users = {
+                "my_username": u[0],
+                "invite_username": u[1]
+            }
+            sendInvitation(users);
+        }
+
+        async function sendInvitation(users){
+            let response = await fetch('/invite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(users)
+            });
+
+            let result = await response.json()
+                
+            if (result['error'] === "false"){
+                let btn = document.getElementById(`${users['invite_username']}`);
+                btn.innerText = "Invited"
+                btn.disabled = true
+            }
+            else{
+                alert("Something went wrong")
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        let is_login = localStorage.getItem("isLogin");
+        if (is_login != "true"){
+            window.location.href = '/login'
+        }
+    </script>
+    <link rel="stylesheet" href="/css/call.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <span>Sensible</span>
+            <nav>
+                <ul>
+                    <!-- <li>🔔</li>
+                    <li><img src="./static/images/translate.png" alt="translate"></li> -->
+                    <!-- <li><img class="menu-btn" src="./static/images/menu.png" alt="menu"></li> -->
+                    <li class="menu-btn noselect">❄</li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="call-section call-section-full">
+            <div id="calls-wrapper" class="calls-wrapper">
+                <div class="person" id="me"></div>
+
+                <div class="user-controls">
+                    <div class="camera">
+                        <i class="bi bi-camera-video"></i>
+                    </div>
+
+                    <div class="mic">
+                        <i class="bi bi-mic"></i>
+                    </div>
+
+                    <div class="call-end active">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="participants">
+                <h3>Participants</h3>
+                <div class="participant">
+                    <img src="/images/person2.png" alt="person-img">
+                    @shubhman_gill99
+                    <input type="checkbox" name="@shubhman_gill99" id="@shubhman_gill99">
+                </div>
+                <div class="participant">
+                    <img src="/images/person2.png" alt="person-img">
+                    @virendra_s42
+                    <input type="checkbox" name="@virendra_s42" id="@virendra_s42">
+                </div>
+                <div class="participant">
+                    <img src="/images/person2.png" alt="person-img">
+                    @Axar_pa1
+                    <input type="checkbox" name="@Axar_pa1" id="@Axar_pa1">
+                </div>
+                <div class="participant">
+                    <img src="/images/person2.png" alt="person-img">
+                    @lord_s54
+                    <input type="checkbox" name="@lord_s54" id="@lord_s54">
+                </div>
+                <button>
+                    Request More Time
+                </button>
+            </div>
+        </div>
+
+    </div>  
+    <script src="https://cdn.agora.io/sdk/release/AgoraRTCSDK-3.6.11.js"></script>
+    <script>
+        let menu_btn = document.getElementsByClassName("menu-btn")[0];
+        let call_section = document.getElementsByClassName("call-section")[0];
+        let sidebar = document.getElementsByClassName("sidebar")[0];
+        let participants = document.getElementsByClassName("participants")[0];
+
+        menu_btn.addEventListener("click", (e) => {
+            call_section.classList.toggle("call-section-full");
+            sidebar.classList.toggle("sidebar-open");
+            participants.classList.toggle("participants-open");
+        })
+
+    </script>
+    <script src="/js/agora.js"></script>
+</body>
+</html>

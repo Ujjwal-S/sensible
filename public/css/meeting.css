@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #181a1b;
+    color: #e8e6e3;
+    scrollbar-width: thin;
+}
+
+.wrapper{
+    width: 100%;
+    max-width: 1500px;
+    height: 100vh;
+    margin: 0 auto;
+}
+header{
+    /* border: 1px solid; */
+    font-size: 1.5rem;
+    width: 90%;
+    height: 100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+header span {
+    border-bottom: 1px solid salmon;
+    cursor: pointer;
+    padding: 0 10px;
+}
+header nav ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+nav ul li{
+    list-style: none;
+    margin-left: 70px;
+    cursor: pointer;
+}
+nav ul li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav ul li a{
+    text-decoration: none;
+}
+
+.section-selector{
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.section-selector a{
+    text-decoration: none;
+    color: rgb(185, 185, 185);
+    transform: scale(.9);
+    transition: all .3s;
+    font-size: 1.1rem;
+}
+.section-selector a:hover{
+    transform: scale(1);
+}
+.section-selector .active-section{
+    background-color: #536dfe;
+    padding: 7px 15px;
+    border-radius: 30px;
+    color: white;
+    transform: scale(1);
+}
+.inst-meeting{
+    background-color: #232728;
+    width: 65%;
+    margin: 30px auto;
+    border-radius: 20px;
+}
+.inst-meeting{
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-bottom: 10px;
+}
+.inst-meeting h2{
+    margin: 20px 20px;
+}
+.inst-meeting form{
+    margin: 20px 80px;
+
+}
+.inst-meeting form .inp-ele{
+    /* border: 1px solid white; */
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.inst-meeting form .inp-ele input{
+    width: 50%;
+    border: none;
+    border-radius: 20px;
+    background-color: #181a1b;
+    color: white;
+    padding: 7px 15px;
+}
+.inst-meeting form input:focus{
+    outline: none;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+}
+input[type=number] { 
+    -moz-appearance: textfield;
+    appearance: textfield;
+    margin: 0; 
+}
+
+.accordion-checkbox {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+.row {
+    display: flex;
+}
+.row .col {
+    flex: 1;
+}
+.row .col:last-child {
+    margin-left: 1em;
+}
+/* Accordion styles */
+.tabs {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
+}
+.tab {
+    width: 100%;
+    color: white;
+    overflow: hidden;
+}
+.tab-label {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    background: #181a1b;
+    font-weight: bold;
+    cursor: pointer;
+    /* Icon */
+}
+.tab-label:hover {
+    background: #181a1b;
+}
+.tab-label::after {
+    content: ">";
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    transition: all 0.35s;
+}
+.tab-content {
+    max-height: 0px;
+    height: 320px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    padding: 0 1em;
+    color: #fff;
+    background: #181a1b;
+    transition: all 0.35s;
+}
+.tab-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+    font-size: 0.75em;
+    background: #181a1b;
+    cursor: pointer;
+}
+.tab-close:hover {
+    background: #181a1b;
+}
+.accordion-checkbox:checked + .tab-label {
+    background: #181a1b;
+}
+.accordion-checkbox:checked + .tab-label::after {
+    transform: rotate(90deg) translateX(10%);;
+}
+.accordion-checkbox:checked ~ .tab-content {
+    max-height: 100vh;
+    padding: 1em;
+}
+
+/* .tab-content .participant label{
+    margin: 0 20px;
+} */
+.tab-content .participant{
+    width: 60%;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+input[type=checkbox]{
+    cursor: pointer;
+}
+.button-container{
+    display: flex;
+    justify-content: center;
+}
+form button{
+    background-color: #536dfe;
+    color: white;
+    cursor: pointer;
+    padding: 7px 15px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 30px;
+    
+}
+form button:hover{
+    box-shadow: 0 3px 10px rgba(83, 109, 254, .6);
+}

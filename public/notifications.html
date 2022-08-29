@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        let is_login = localStorage.getItem("isLogin");
+        if (is_login != "true"){
+            window.location.href = '/login'
+        }
+    </script>
+    <link rel="stylesheet" href="./css/notifications.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <span>Sensible</span>
+            <nav>
+                <ul>
+                    <li><a href="/notifications">🔔</a></li>
+                    <li><img src="./images/translate.png" alt="translate"></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <h1>Notifications</h1>
+            <div class="invi">
+                <h3>Invitations</h3>
+                <div class="dot1"></div>
+            </div>
+            
+            <ul>
+
+            </ul>
+
+            <div class="invi call-invi">
+                <h3>Meeting Invitations</h3>
+                <div class="dot2"></div>
+            </div>
+
+            <ul class="meetingsul">
+
+            </ul>
+        </main>
+    </div>
+
+    <script>
+        const invi_heading = document.getElementsByTagName("h3")[0];
+        const unlist = document.getElementsByTagName("ul")[1];
+        const unlist2 = document.getElementsByTagName("ul")[2];
+
+        getNotifications({"username": localStorage.getItem("username")});
+
+        async function getNotifications(username){
+            let response = await fetch('/get-notifications', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(username)
+            });
+
+
+            let result = await response.json()
+            if (result['error'] === "false"){
+                unlist.innerHTML = "";
+                if (result['s_message'].length == 0){
+                    invi_heading.classList.add("text-gray")
+                }
+                result['s_message'].forEach(element => {
+                    let e = document.createElement("li");
+                    e.innerHTML = 
+                    `
+                        <img src="./images/person2.png" alt="person-image">
+                        <div class="from">${element['from_username']}</div>
+                        <button onClick=accpetInvitation('${element['from_username']}')> Accept </button>
+
+                    `;
+                    unlist.append(e);
+                });
+            }
+            else{
+                alert("Something went wrong");
+            }
+        }
+        function accpetInvitation(from){
+            confirm
+            const me = localStorage.getItem("username");
+            let accpet_invitation = {
+                "other_username": from,
+                "my_username": me
+            }
+            acceptInvite(accpet_invitation);
+        }
+        async function acceptInvite(accpet_invitation_object){
+            let response = await fetch('/accept-invitation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(accpet_invitation_object)
+            });
+
+
+            let result = await response.json()
+            if (result['error'] === "false"){
+                location.reload(); 
+            }
+            else{
+                alert("Something went wrong");
+            }
+        }
+        
+        getMeetingNotifications({"username": localStorage.getItem("username")});
+
+        async function getMeetingNotifications(username){
+            let response = await fetch('/get-meeting-notifactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(username)
+            });
+
+
+            let result = await response.json()
+            if (result['error'] === "false"){
+                console.log(result);
+                result['s_message'].forEach(element => {
+                    let e = document.createElement("li");
+                    e.innerHTML = 
+                    `
+                        <img src="./images/person2.png" alt="person-image">
+                        <div class="from"><b>From</b>: ${element['from_username']}
+                            <div class="duration">${element['duration']} Mins</div>
+                        </div>
+                        <a href="/call/${element['meetingId']}" class="button"> Join </a>
+
+                    `;
+                    unlist2.append(e);
+                })
+            }
+            else{
+                alert("Something went wrong");
+            }
+        }
+    </script>
+</body>
+</html>

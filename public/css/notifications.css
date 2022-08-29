@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #181a1b;
+    color: #e8e6e3;
+}
+
+.wrapper{
+    width: 100%;
+    max-width: 1500px;
+    height: 100vh;
+    margin: 0 auto;
+}
+header{
+    /* border: 1px solid; */
+    font-size: 1.5rem;
+    width: 90%;
+    height: 100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+header span {
+    border-bottom: 1px solid salmon;
+    cursor: pointer;
+    padding: 0 10px;
+}
+header nav ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+nav ul li{
+    list-style: none;
+    margin-left: 70px;
+    cursor: pointer;
+}
+nav ul li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav ul li a{
+    text-decoration: none;
+}
+main{
+    width: 90%;
+    margin: 0 auto;
+}
+main h1{
+    color: #a2a2a2;
+}
+main .invi{
+    position: relative;
+    width: fit-content;
+    margin: 20px auto;
+
+}
+main h3{
+    text-align: center;
+}
+
+.text-gray{
+    color: #a2a2a2;
+}
+main .dot1{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: #26a126;
+    position: absolute;
+    top: 35%;
+    left: -20%;
+}
+main .dot2{
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: #26a126;
+    position: absolute;
+    top: 35%;
+    left: -12%;
+}
+main ul li{
+    background-color: #232728;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: fit-content;
+    max-width: fit-content;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+main ul li button, .button{
+    background-color: #536dfe;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 7px 15px;
+    cursor: pointer;
+}
+main ul li button:hover {
+    box-shadow: 0 3px 10px rgb(83, 109, 254, .6);
+}
+main ul li a{
+    text-decoration: none;
+    font-size: .9rem;
+}
+main ul li a:hover {
+    box-shadow: 0 3px 10px rgb(83, 109, 254, .6);
+}
+.from{
+    text-align: center;
+}
+
+ul li div{
+    margin: 5px 20px;
+}
