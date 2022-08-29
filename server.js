@@ -6,6 +6,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const {RtcTokenBuilder, RtcRole} = require('agora-access-token');
+const createNewMeeting = require('./services/zcreatemeetings')
 
 const harperCreateUser = require('./services/harperCreateUser');
 const harperGetUser = require('./services/harperGetUser');
@@ -19,7 +20,9 @@ const harperCreateContactTemplate = require('./services/harperCreateContactTempl
 const harperGetMeetings = require('./services/harperGetMeetings');
 const harperCreateMeetingNotification = require('./services/harperCreateMeetingNotification');
 const harperCreateMeeting = require('./services/harperCreateMeeting');
-const harperGetMeetingInfo = require('./services/haperGetMeetingInfo.js')
+const harperGetMeetingInfo = require('./services/haperGetMeetingInfo.js');
+
+
 
 const APP_ID = process.env.APP_ID;
 const APP_CERTIFICATE = process.env.APP_CERTIFICATE;
@@ -35,10 +38,64 @@ app.use(express.static(path.join(__dirname, "public")));
 let activeSockets = []
 let activeUsers = {}
 
+// socket work goes here
+
+const channels = {};
+
+function getAllUsers(channelName) {
+    if(!channels[channelName]) return [];
+    all_usernames = channels[channelName].map(s => s.username);
+    // console.log(`all_usernames in channel ${channelName}`, all_usernames)
+    return all_usernames;
+}
+
+function getSocket(channel, username) {
+    sock = channels[channel].filter(s => s.username==username)[0];
+    return sock;
+}
+
+io.on('connection', function(socket) {
+    console.log('A user connected', socket.id);
+
+    socket.on('join-channel', ({username, channel}) => {
+        const other_users = getAllUsers(channel);
+        socket.username = username;
+        socket.channel = channel;
+        if(!channels[channel]) channels[channel] = [socket];
+        else channels[channel].push(socket);
+        socket.join(channel);
+        socket.broadcast.to(channel).emit("user-joined", username)
+        socket.emit('other-users', other_users);
+    })
+
+
+    socket.on('invite-participants', async (participants) => {
+        console.log('SERVER: client asked to request participants.')
+        const nextMeetingId = await createNewMeeting();
+
+        console.log('new meeting id', nextMeetingId)
+        io.to(socket.id).emit('extend-meeting', {
+            username: socket.username,
+            nextMeetingId: nextMeetingId,
+            originator: true
+        })
+
+        participants.forEach((p) =>  {
+            let sock = getSocket(socket.channel, p);
+            io.to(sock.id).emit('extend-meeting', {
+                username: socket.username,
+                nextMeetingId: nextMeetingId,
+                originator: false
+            })
+        })
+    })   
+
+});
 
 app.get("/", (request, response) => {
     response.sendFile(path.join(__dirname, "public", "register.html"))
 })
+
 
 app.get("/login", (request, response) => {
     response.sendFile(path.join(__dirname, "public", "login.html"))
@@ -391,16 +448,6 @@ app.get("/call/:meetingid", (request, response) => {
 
 
 
-io.on('connection', function(socket) {
-    console.log('A user connected', socket.id);
-
-});
-
-
-
-
-
-
 function randomString(length) {
 		var result           = '';
 		var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -416,7 +463,7 @@ randomString(4);
 
 
 
-app.listen(8000, () => {
+http.listen(8000, () => {
     console.log("**********************************");
     console.log("Server running on Port 8000");
     console.log("***************************");

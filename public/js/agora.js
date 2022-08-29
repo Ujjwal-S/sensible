@@ -30,6 +30,7 @@ async function getMeetingInfo(){
         alert("Something went wrong, Are you sure this is the correct meeting id?")
         throw new Error("ERROR")
     }
+    socketWorks();
 }
 
 console.log(channelName, token)
@@ -43,12 +44,9 @@ async function startAgoraWork(){
 function addVideoStream(elementId) {
     console.log("CAMER HERE")
     let streamDiv = document.createElement("div");
-
     streamDiv.classList.add("person");
     streamDiv.id = elementId;
-
     streamDiv.style.transform = "rotateY(180deg)";
-
     remoteContainer.appendChild(streamDiv);
 };
 
@@ -154,9 +152,6 @@ audio_btn.addEventListener("click", (e) => {
 })
 
 
-call_end.addEventListener("click", (e) =>{
-    window.location.href = "/people"
-})
 }
 
 

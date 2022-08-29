@@ -12,6 +12,7 @@
     </script>
     <link rel="stylesheet" href="/css/call.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js" integrity="sha512-9mpsATI0KClwt+xVZfbcf2lJ8IFBAwsubJ6mI3rtULwyM3fBmQFzj0It4tGqxLOGQwGfJdk/G+fANnxfq9/cew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>Document</title>
 </head>
 <body>
@@ -41,7 +42,7 @@
                         <i class="bi bi-mic"></i>
                     </div>
 
-                    <div class="call-end active">
+                    <div class="call-end active" id="end-call">
                         <i class="bi bi-telephone-fill"></i>
                     </div>
                 </div>
@@ -50,27 +51,8 @@
         <div class="sidebar">
             <div class="participants">
                 <h3>Participants</h3>
-                <div class="participant">
-                    <img src="/images/person2.png" alt="person-img">
-                    @shubhman_gill99
-                    <input type="checkbox" name="@shubhman_gill99" id="@shubhman_gill99">
-                </div>
-                <div class="participant">
-                    <img src="/images/person2.png" alt="person-img">
-                    @virendra_s42
-                    <input type="checkbox" name="@virendra_s42" id="@virendra_s42">
-                </div>
-                <div class="participant">
-                    <img src="/images/person2.png" alt="person-img">
-                    @Axar_pa1
-                    <input type="checkbox" name="@Axar_pa1" id="@Axar_pa1">
-                </div>
-                <div class="participant">
-                    <img src="/images/person2.png" alt="person-img">
-                    @lord_s54
-                    <input type="checkbox" name="@lord_s54" id="@lord_s54">
-                </div>
-                <button>
+                
+                <button id="invite">
                     Request More Time
                 </button>
             </div>
@@ -91,6 +73,18 @@
         })
 
     </script>
+    <script src="/js/socket.js"></script>
     <script src="/js/agora.js"></script>
+    <script>
+        document.getElementById("invite").addEventListener('click', () => {
+            inviteParticipants();
+        })
+    </script>
+    <script>
+        document.getElementById("end-call").addEventListener('click', () => {
+            if(localStorage.getItem("nextMeeting")=="true") window.location.href = `/call/${localStorage.getItem("nextMeetingId")}`
+            else window.location.href = '/people'
+        })
+    </script>
 </body>
 </html>
